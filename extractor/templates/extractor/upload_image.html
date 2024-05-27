@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Image to Text</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            padding-top: 50px;
+        }
+        .container {
+            max-width: 600px;
+        }
+        textarea {
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mb-4">
+        <h1 class="text-center">Upload an Image and Extract Text</h1>
+        <form method="post" enctype="multipart/form-data" class="mt-4">
+            {% csrf_token %}
+            <div class="form-group">
+                {{ form.as_p }}
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Upload</button>
+        </form>
+        {% if extracted_text %}
+            <h2 class="mt-4">Extracted Text</h2>
+            <textarea id="extractedText" class="form-control" rows="10">{{ extracted_text }}</textarea>
+            <button id="copyButton" class="btn btn-success mt-2" onclick="copyText()">
+                <i class="fas fa-copy"></i> Copy
+            </button>
+        {% endif %}
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- JavaScript for Copy Functionality -->
+    <script>
+        function copyText() {
+            var text = document.getElementById("extractedText");
+            text.select();
+            text.setSelectionRange(0, 99999); // For mobile devices
+            document.execCommand("copy");
+
+            var button = document.getElementById("copyButton");
+            button.classList.remove("btn-success");
+            button.classList.add("btn-primary");
+            button.innerHTML = '<i class="fas fa-check"></i> Copied';
+        }
+    </script>
+</body>
+</html>
